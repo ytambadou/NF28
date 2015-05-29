@@ -11,12 +11,24 @@
     <link rel="stylesheet" type="text/css" href="css/estilos.css">
 	<script src="js/musee.js"></script>
 
+<?php
+header('Content-Type: text/html; charset=UTF-8');
+$con=mysql_connect("localhost","root","");
+mysql_select_db("musee");
+if (!$con) {
+    die('Could not connect: ' . mysql_error($con));
+	}
+$res=mysql_query("SELECT nom FROM style");
+$res2=mysql_query("SELECT nom FROM type");
+$res3=mysql_query("SELECT description FROM epoque");
+
+
+
+?>
 </head>
 <body>
 
     <!-- Tête -->
-    <header>
-       Bienvenue </header>
     
     <section id="recherche">
         <div class="container">
@@ -27,58 +39,65 @@
                 </div>
             </div>
 		<div id="recherche_oeuvre">
-			<form action="resultat.php" id="recherche"  method="POST">
+		<form action="resultat.php" method="POST">
             <div class="row">
                 <div class="col-lg-12">
-                    <form action="resultat.html">
+                    
                         <div class="row">
 							<div class="col-lg-4"></div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Nom" id="name">
+                                    <input name="name" type="text" class="form-control" placeholder="Nom" id="name" name="nom">
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Auteur" id="email">
+                                    <input name="autor" type="text" class="form-control" placeholder="Auteur" id="email" name="auteur">
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 
 								<div class="form-group">
-									<input type = text list ="epoque" class="form-control" placeholder="Epoque" id="type">
-									<datalist id ="epoque">
-									   <option> Antiquité (-52 à 476)
-									   <option> Moyen Âge (476-1517)
-									   <option> Les temps modernes (1517-1789)
-									   <option> Les temps révolutionnaires (1789-1815)
-									   <option> Le XIXème siècle (1800-1900)
-									   <option> Les temps agités (1914-1958)
-									   <option> Époque contemporaine et moderne
-									</datalist>
+									
+								<input type = text list = "epoques" class="form-control" placeholder="Epoque" id="epoque" name="epoque">
+									<datalist id = "epoques">
+								    <?php
+                                 while($row=mysql_fetch_array($res3))
+                                   {  ?>
+		 
+									   <option> <?php echo $row["description"] ?>
+									 <?php
+									 }
+									 ?>
+									 </datalist>
 								</div>
 								
+								
 								<div class="form-group">
-									<input type = text list = "types" class="form-control" placeholder="Type" id="type">
+									<input type = text list = "types" class="form-control" placeholder="Type" id="type" name="type">
 									<datalist id = "types">
-									   <option> Peinture
-									   <option> Sculpture
-									   <option> Architecture
-									   <option> Photographie
-									   <option> Autres
+									    <?php
+                                 while($row=mysql_fetch_array($res2))
+                                   {  ?>
+		 
+									   <option> <?php echo $row["nom"] ?>
+									 <?php
+									 }
+									 ?>
 									</datalist>
 								</div>
 								<div class="form-group">
-									<input type = text list = "styles" class="form-control" placeholder="Style" id="style">
+									<input type = text list = "styles" class="form-control" placeholder="Style" id="style" name="style">
 									<datalist id = "styles">
-									   <option> Impressionnisme
-									   <option> Cubisme
-									   <option> Futurisme
-									   <option> Abstraction
-									   <option> Surréalisme
-									   <option> Orientalisme
-									   <option> Autres
+									     <?php
+                                 while($row=mysql_fetch_array($res))
+                                   {  ?>
+		 
+									   <option> <?php echo $row["nom"] ?>
+									 <?php
+									 }
+									 ?>
 									</datalist>
 								</div>
-							</form>
+							
 							</div>
                             </div>
 							<div class="col-lg-4"></div>
@@ -87,11 +106,12 @@
                                 <div id="success"></div>
                                 <button type="submit" class="btn btn-xl">Rechercher</button>
                             </div>
-                        </div>       
+                        </div> 			
 			       </div>
 			</form>
            </div>
         </div>
-    </section>        
+    </section>
+	
 </body>
 </html>
