@@ -10,15 +10,31 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/thumbnail-gallery.css" rel="stylesheet">
 	<script type="text/javascript" src="js/musee.js"></script>
+
 </head>
-
 <body>	
-<?php include("inclure.php"); ?>
-
+<center> <h3>Resultat recherche</h3></center>
 <?php 
-mysql_connect("localhost","root","");
+$name=$_POST['epoque'];
+$autor=$_POST['autor'];
+$epoque=$_POST['epoque'];
+$type=$_POST['type'];
+$style=$_POST['style'];
+$con=mysql_connect("localhost","root","");
 mysql_select_db("musee");
-$res=mysql_query("select images,nom from oeuvre");
+if (!$con){
+    die('Could not connect: ' . mysql_error($con));
+}
+$requete;
+if ($name){
+	$requete += "e.auteur";
+}
+$req=mysql_query("SELECT images FROM oeuvre WHERE nom= '$name.'");
+
+if (!$req) {
+  echo "<h3>Pas d'oeuvres correspondants !</p>";
+} 
+else {
         
 				echo "<table>";
 				echo "<tr>";
@@ -27,7 +43,7 @@ $res=mysql_query("select images,nom from oeuvre");
 
         <div class="row">
 		<?php
-          while($row=mysql_fetch_array($res))
+          while($row=mysql_fetch_array($req))
          {  ?>
 		 
 
@@ -35,19 +51,20 @@ $res=mysql_query("select images,nom from oeuvre");
                 <a class="thumbnail" href="#">
                     <img class="img-responsive" src="<?php echo $row["images"] ?>" alt="">
                 </a>
+				
             </div>
             
         
 
 			<?php
          }
+	
+		 }
 		 ?>
 		 
 		 </div>
 			<?php	
 				echo"<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";            
 ?>	
-
-		
 </body>
 </html>
